@@ -26,6 +26,7 @@ void error();
 #define LETTER 0
 #define DIGIT 1
 #define UNKNOWN 99
+#define NEWLINE 101
 /* Token codes */
 #define INT_LIT 10
 #define IDENT 11
@@ -86,6 +87,11 @@ int lookup(char ch) {
       nextToken = DIV_OP; 
       break;
 
+    case '\n':
+      addChar();
+      nextToken = NEWLINE;
+      break;
+
     default: 
       addChar(); 
       nextToken = EOF; 
@@ -110,11 +116,16 @@ void addChar() {
 input and determine its character class */ 
 void getChar() {
   if ((nextChar = getc(in_fp)) != EOF) { 
+    printf("Next Char is: ");
+    printf("%c", nextChar);
     if (isalpha(nextChar))
       charClass = LETTER;
     else if (isdigit(nextChar))
       charClass = DIGIT;
     else charClass = UNKNOWN;
+  }
+  else if (nextChar == '\n') {
+    charClass = NEWLINE;
   }
   else
      charClass = EOF;
@@ -169,6 +180,14 @@ int lex() {
       lexeme[2] = 'F';
       lexeme[3] = 0;
       break;
+    /* NEWLINE */
+    case NEWLINE:
+      nextToken = NEWLINE;
+      lexeme[0] = 'N';
+      lexeme[1] = 'E';
+      lexeme[2] = 'W';
+      lexeme[3] = 'L';
+      lexeme[4] = 'I';
   } 
       /* End of switch */
   printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme); 
@@ -229,7 +248,7 @@ void factor() {
     if (nextToken == LEFT_PAREN) {
       lex();
       expr();
-      if (nextTokesn == RIGHT_PAREN)
+      if (nextToken == RIGHT_PAREN)
         lex();
       else
         error();
