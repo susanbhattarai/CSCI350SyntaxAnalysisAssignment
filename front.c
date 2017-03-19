@@ -229,7 +229,7 @@ void factor() {
     if (nextToken == LEFT_PAREN) {
       lex();
       expr();
-      if (nextTokesn == RIGHT_PAREN)
+      if (nextToken == RIGHT_PAREN)
         lex();
       else
         error();
