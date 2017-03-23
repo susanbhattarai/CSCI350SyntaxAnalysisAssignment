@@ -1,6 +1,8 @@
 /* front.c - a lexical analyzer system for simple arithmetic expressions */
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
+
 
 /* Global declarations */ /* Variables */
 int charClass;
@@ -9,8 +11,8 @@ char nextChar;
 int lexLen;
 int token;
 int nextToken;
-int lineNumber;
-FILE *in_fp, *fopen();
+int lineNumber = 0;
+FILE *fp, *fopen();
 
 
 /* Function declarations */ void addChar();
@@ -42,9 +44,18 @@ void error();
 /* main driver */
 main() {
 /* Open the input data file and process its contents */ 
-  if ((in_fp = fopen("front.in", "r")) == NULL)
-    printf("ERROR - cannot open front.in \n"); 
-  else {
+  fp = fopen("front.in", "r");
+  size_t len = 0;
+  ssize_t read;
+  char * line = NULL;
+
+
+  if (fp == NULL) {
+    fprintf(stderr,"fopen() failed in file %s at line # %d", __FILE__,__LINE__);
+    exit(EXIT_FAILURE);
+  }
+  while ((read = getline(&line, &len, fp)) != -1) {
+    lineNumber += 1;
     getChar(); 
     do {
       lex();
@@ -115,7 +126,7 @@ void addChar() {
 /* getChar - a function to get the next character of
 input and determine its character class */ 
 void getChar() {
-  if ((nextChar = getc(in_fp)) != EOF) { 
+  if ((nextChar = getc(fp)) != EOF) { 
     if (isalpha(nextChar))
       charClass = LETTER;
     else if (isdigit(nextChar))
