@@ -1,5 +1,4 @@
-/* front.c - a lexical analyzer system for simple
-                                arithmetic expressions */
+/* front.c - a lexical analyzer system for simple arithmetic expressions */
 #include <stdio.h>
 #include <ctype.h>
 
@@ -10,6 +9,7 @@ char nextChar;
 int lexLen;
 int token;
 int nextToken;
+int lineNumber;
 FILE *in_fp, *fopen();
 
 
@@ -116,8 +116,6 @@ void addChar() {
 input and determine its character class */ 
 void getChar() {
   if ((nextChar = getc(in_fp)) != EOF) { 
-    printf("Next Char is: ");
-    printf("%c", nextChar);
     if (isalpha(nextChar))
       charClass = LETTER;
     else if (isdigit(nextChar))
