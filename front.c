@@ -40,6 +40,11 @@ void error();
 #define LEFT_PAREN 25
 #define RIGHT_PAREN 26
 
+/* Global variables */
+size_t len = 0;
+ssize_t read;
+char * line = NULL;
+
 /******************************************************/
 /* main driver */
 main() {
