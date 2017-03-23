@@ -65,7 +65,7 @@ main() {
     do {
       lex();
       expr();
-    } while (nextToken != EOF);
+    } while (nextToken != EOF || nextToken != NEWLINE);
   } 
 }
 
