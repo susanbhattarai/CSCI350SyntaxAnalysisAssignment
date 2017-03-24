@@ -25,8 +25,7 @@ void term();
 void factor();
 void expr();
 void error();
-void printCharacter();
-
+int getErrorCharacter();
 /* Character classes */
 #define LETTER 0
 #define DIGIT 1
@@ -275,18 +274,22 @@ void factor() {
 }  /* End of function factor */
 
 void error() {
-  printf("--------------Syntax error occured in line %d in ", lineNumber);
-  printCharacter();
+  printf("--------------Syntax error occured in line %d in %d", lineNumber, getErrorCharacter());
   printf("------------------");
 }
 
-void printCharacter() {
+int getErrorCharacter() {
   currentIndexCount -= 1;
-  while (line[currentIndexCount] == ' ') {
-    printf("susan");
-    currentIndexCount -= 1;
+  if (lineNumber <= 0){
+    return 0;
+  } else{
+    while (line[currentIndexCount] == ' ') {
+      currentIndexCount -= 1;
+    }
   }
-  printf("%c", line[currentIndexCount]);
+  return currentIndexCount;
 }
+
+
 
 
