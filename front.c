@@ -53,7 +53,7 @@ char * line = NULL;
 
 /******************************************************/
 /* main driver */
-main() {
+int main(int argc, char *argv[]) {
 /* Open the input data file and process its contents */ 
   fp = fopen("front.in", "r");
   if (fp == NULL) {
