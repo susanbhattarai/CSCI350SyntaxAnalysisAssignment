@@ -12,7 +12,7 @@ int lexLen;
 int token;
 int nextToken;
 int lineNumber = 0;
-int currentIndexCharacter;
+int currentIndexCount;
 FILE *fp, *fopen();
 
 
@@ -25,6 +25,7 @@ void term();
 void factor();
 void expr();
 void error();
+void printCharacter();
 
 /* Character classes */
 #define LETTER 0
@@ -58,7 +59,7 @@ main() {
   }
   while ((read = getline(&line, &len, fp)) != -1) {
     lineNumber += 1;
-    currentIndexCharacter = 0;
+    currentIndexCount = 0;
     getChar(); 
     do {
       lex();
@@ -130,11 +131,11 @@ void addChar() {
 /* getChar - a function to get the next character of
 input and determine its character class */ 
 void getChar() {
-  if (line[currentIndexCharacter] == '\n' || line[currentIndexCharacter] == '\0') {
+  if (line[currentIndexCount] == '\n' || line[currentIndexCount] == '\0') {
     charClass = EOF;
   } else {
-    nextChar = line[currentIndexCharacter];
-    currentIndexCharacter += 1;
+    nextChar = line[currentIndexCount];
+    currentIndexCount += 1;
     if (isalpha(nextChar))
       charClass = LETTER;
     else if (isdigit(nextChar))
@@ -274,7 +275,18 @@ void factor() {
 }  /* End of function factor */
 
 void error() {
-  printf("--------------Syntax error occured in line %d in %c-------------------\n", lineNumber, line[currentIndexCharacter]);
+  printf("--------------Syntax error occured in line %d in ", lineNumber);
+  printCharacter();
+  printf("------------------");
+}
+
+void printCharacter() {
+  currentIndexCount -= 1;
+  while (line[currentIndexCount] == ' ') {
+    printf("susan");
+    currentIndexCount -= 1;
+  }
+  printf("%c", line[currentIndexCount]);
 }
 
 
