@@ -12,10 +12,12 @@ int lexLen;
 int token;
 int nextToken;
 int lineNumber = 0;
+int currentIndexCharacter;
 FILE *fp, *fopen();
 
 
-/* Function declarations */ void addChar();
+/* Function declarations */ 
+void addChar();
 void getChar();
 void getNonBlank();
 int lex();
@@ -50,23 +52,20 @@ char * line = NULL;
 main() {
 /* Open the input data file and process its contents */ 
   fp = fopen("front.in", "r");
-  size_t len = 0;
-  ssize_t read;
-  char * line = NULL;
-
-
   if (fp == NULL) {
     fprintf(stderr,"fopen() failed in file %s at line # %d", __FILE__,__LINE__);
     exit(EXIT_FAILURE);
   }
   while ((read = getline(&line, &len, fp)) != -1) {
     lineNumber += 1;
+    currentIndexCharacter = 0;
     getChar(); 
     do {
       lex();
       expr();
-    } while (nextToken != EOF || nextToken != NEWLINE);
-  } 
+    } while (nextToken != EOF);
+    printf("\n\n");
+  }
 }
 
 /*****************************************************/ 
@@ -131,18 +130,17 @@ void addChar() {
 /* getChar - a function to get the next character of
 input and determine its character class */ 
 void getChar() {
-  if ((nextChar = getc(fp)) != EOF) { 
+  if (line[currentIndexCharacter] == '\n' || line[currentIndexCharacter] == '\0') {
+    charClass = EOF;
+  } else {
+    nextChar = line[currentIndexCharacter];
+    currentIndexCharacter += 1;
     if (isalpha(nextChar))
       charClass = LETTER;
     else if (isdigit(nextChar))
       charClass = DIGIT;
     else charClass = UNKNOWN;
   }
-  else if (nextChar == '\n') {
-    charClass = NEWLINE;
-  }
-  else
-     charClass = EOF;
 }
 
 
@@ -276,7 +274,7 @@ void factor() {
 }  /* End of function factor */
 
 void error() {
-  printf("Syntax error");
+  printf("--------------Syntax error occured in line %d in %c-------------------\n", lineNumber, line[currentIndexCharacter]);
 }
 
 
