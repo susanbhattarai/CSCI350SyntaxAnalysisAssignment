@@ -1,3 +1,7 @@
+/* Syntax Assignment Programming */
+/*Author: Susan Bhattarai */
+
+
 /* front.c - a lexical analyzer system for simple arithmetic expressions */
 #include <stdio.h>
 #include <ctype.h>
@@ -200,6 +204,7 @@ int lex() {
       lexeme[2] = 'W';
       lexeme[3] = 'L';
       lexeme[4] = 'I';
+      lexeme[5] = 'E';
   } 
       /* End of switch */
   printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme); 
@@ -274,19 +279,12 @@ void factor() {
 }  /* End of function factor */
 
 void error() {
-  printf("--------------Syntax error occured in line %d in %d", lineNumber, getErrorCharacter());
-  printf("------------------");
+  currentIndexCount -= 1;
+  printf("--------------Syntax error occured in line %d in %d %c", lineNumber, getErrorCharacter(), line[currentIndexCount]);
+  printf("------------------\n");
 }
 
 int getErrorCharacter() {
-  currentIndexCount -= 1;
-  if (lineNumber <= 0){
-    return 0;
-  } else{
-    while (line[currentIndexCount] == ' ') {
-      currentIndexCount -= 1;
-    }
-  }
   return currentIndexCount;
 }
 
